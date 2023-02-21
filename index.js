@@ -17,12 +17,12 @@ const server = http.createServer((req, res) => {
     if (req.url === '/gettodoactive') {
       let getData = readFiles()
       res.writeHead(200, options)
-      res.end(JSON.stringify(getData.filter((e) => e.isComplate)))
+      res.end(JSON.stringify(getData.filter((e) => !e.isComplate)))
     }
     if (req.url === '/gettodocompl') {
       let getData = readFiles()
       res.writeHead(200, options)
-      res.end(JSON.stringify(getData.filter((e) => !e.isComplate)))
+      res.end(JSON.stringify(getData.filter((e) => e.isComplate)))
     }
   }
   if (req.method === 'POST') {

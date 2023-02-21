@@ -25,23 +25,36 @@ form.addEventListener('submit', (e) => {
 })
 
 let dataq = []
-fetch('http://127.0.0.1:3030/gettodo')
+
+let local = localStorage.getItem('token')
+
+if (!local) {
+  localStorage.setItem('token', 'gettodoall')
+}
+fetch(`http://127.0.0.1:3030/${local}`)
   .then((res) => res.json())
   .then((data) => {
     writeUI(data)
     active.addEventListener('click', () => {
-      let filter = data.filter((e) => !e.isComplate && e)
-      dataq = filter
-      writeUI(dataq)
+      localStorage.setItem('token', 'gettodoactive')
+      window.location.reload()
+      // let filter = data.filter((e) => !e.isComplate && e)
+      // dataq = filter
+      // writeUI(dataq)
     })
     complate.addEventListener('click', () => {
-      let filter = data.filter((e) => e.isComplate && e)
-      dataq = filter
-      writeUI(dataq)
+      localStorage.setItem('token', 'gettodocompl')
+      window.location.reload()
+
+      // let filter = data.filter((e) => e.isComplate && e)
+      // dataq = filter
+      // writeUI(dataq)
     })
     all.addEventListener('click', () => {
-      dataq = data
-      writeUI(dataq)
+      localStorage.setItem('token', 'gettodoall')
+      window.location.reload()
+      // dataq = data
+      // writeUI(dataq)
     })
   })
 
