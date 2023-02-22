@@ -91,8 +91,7 @@ function writeUI(data) {
   })
 }
 
-function fetchData(data, w) {
-  console.log(data)
+function fetchData(data) {
   fetch('http://127.0.0.1:3030/updatetodo', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -101,6 +100,94 @@ function fetchData(data, w) {
 
 if (localstr === 'login') {
   todopage.remove()
+
+  const signUpBtn = document.getElementById('signUpBtn')
+  loginBtn = document.getElementById('loginBtn')
+  emailSignUp = document.getElementById('emailSignUp')
+  passwordSignUp = document.getElementById('passwordSignUp')
+  password = document.getElementById('password')
+  email = document.getElementById('email')
+
+  //
+
+  const wrapper = document.querySelector('.wrapper'),
+    signupHeader = document.querySelector('.signup header'),
+    loginHeader = document.querySelector('.login header')
+
+  loginHeader.addEventListener('click', () => {
+    wrapper.classList.add('active')
+  })
+  signupHeader.addEventListener('click', () => {
+    wrapper.classList.remove('active')
+  })
+  const f = localStorage.getItem('isRegister')
+
+  if (f === 'true') {
+    wrapper.classList.add('active')
+  } else if (f === 'false') {
+    wrapper.classList.remove('active')
+  }
+
+  //
+
+  signUpBtn.addEventListener('click', () => {
+    if (emailSignUp.value.length > 4 && passwordSignUp.value.length > 4) {
+      fetch('http://127.0.0.1:3030/create_usr', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: emailSignUp.value,
+          password: passwordSignUp.value,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === 'ok') {
+            alert('You are succes registered')
+            localStorage.setItem('tokenUser', data.token)
+            localStorage.setItem('isRegister', 'true')
+          } else if (data.message === 'error') {
+            alert('This user already added')
+          }
+        })
+    } else {
+      alert(
+        `${email.value.length < 4 ? 'Email ' : ''}${
+          password.value.length < 4 ? 'Password ' : ''
+        }` + '4 tadan kam bolmasin',
+      )
+    }
+  })
+
+  loginBtn.addEventListener('click', () => {
+    if (email.value.length > 4 && password.value.length > 4) {
+      fetch('http://127.0.0.1:3030/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email.value,
+          password: password.value,
+        }),
+      })
+        .then((res) => res.json())
+        .then((message) => {
+          if (message.message === 'success') {
+            alert('succes')
+            localStorage.setItem('todo', 'logout')
+            localStorage.setItem('isRegister', 'false')
+            location.reload()
+          } else if (message.message === 'password wrong') {
+            alert(message.message)
+          } else if (message.message === 'User not found') {
+            alert(message.message)
+          }
+        })
+    } else {
+      alert(
+        `${email.value.length < 4 ? 'Email ' : ''}${
+          password.value.length < 4 ? 'Password ' : ''
+        }` + '4 tadan kam bolmasin',
+      )
+    }
+  })
 } else if (localstr === 'logout') {
   login.remove()
 } else {
@@ -108,91 +195,3 @@ if (localstr === 'login') {
 }
 
 // users
-
-const signUpBtn = document.getElementById('signUpBtn')
-loginBtn = document.getElementById('loginBtn')
-emailSignUp = document.getElementById('emailSignUp')
-passwordSignUp = document.getElementById('passwordSignUp')
-password = document.getElementById('password')
-email = document.getElementById('email')
-
-//
-
-const wrapper = document.querySelector('.wrapper'),
-  signupHeader = document.querySelector('.signup header'),
-  loginHeader = document.querySelector('.login header')
-
-loginHeader.addEventListener('click', () => {
-  wrapper.classList.add('active')
-})
-signupHeader.addEventListener('click', () => {
-  wrapper.classList.remove('active')
-})
-const f = localStorage.getItem('isRegister')
-
-if (f === 'true') {
-  wrapper.classList.add('active')
-} else if (f === 'false') {
-  wrapper.classList.remove('active')
-}
-
-//
-
-signUpBtn.addEventListener('click', () => {
-  if (emailSignUp.value.length > 4 && passwordSignUp.value.length > 4) {
-    fetch('http://127.0.0.1:3030/create_usr', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: emailSignUp.value,
-        password: passwordSignUp.value,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === 'ok') {
-          alert('You are succes registered')
-          localStorage.setItem('tokenUser', data.token)
-          localStorage.setItem('isRegister', 'true')
-        } else if (data.message === 'error') {
-          alert('This user already added')
-        }
-      })
-  } else {
-    alert(
-      `${email.value.length < 4 ? 'Email ' : ''}${
-        password.value.length < 4 ? 'Password ' : ''
-      }` + '4 tadan kam bolmasin',
-    )
-  }
-})
-
-loginBtn.addEventListener('click', () => {
-  if (email.value.length > 4 && password.value.length > 4) {
-    fetch('http://127.0.0.1:3030/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value,
-      }),
-    })
-      .then((res) => res.json())
-      .then((message) => {
-        if (message.message === 'success') {
-          alert('succes')
-          localStorage.setItem('todo', 'logout')
-          localStorage.setItem('isRegister', 'false')
-          location.reload()
-        } else if (message.message === 'password wrong') {
-          alert(message.message)
-        } else if (message.message === 'User not found') {
-          alert(message.message)
-        }
-      })
-  } else {
-    alert(
-      `${email.value.length < 4 ? 'Email ' : ''}${
-        password.value.length < 4 ? 'Password ' : ''
-      }` + '4 tadan kam bolmasin',
-    )
-  }
-})
