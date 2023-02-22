@@ -101,3 +101,16 @@ if (localstr === 'login') {
 localStorage.setItem('todo', 'login')
 
 // users
+
+const signUpBtn = document.getElementById('signUpBtn')
+loginBtn = document.getElementById('loginBtn')
+emailSignUp = document.getElementById('emailSignUp')
+passwordSignUp = document.getElementById('passwordSignUp')
+password = document.getElementById('password')
+email = document.getElementById('email')
+
+//
+
+signUpBtn.addEventListener('click', () => {
+  // emailSignUp.value
+})
