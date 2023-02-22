@@ -47,7 +47,64 @@
         </div>
       </div>
     </div>
-    <div id="login"></div>
+    <div id="login">
+      <section class="wrapper">
+        <div class="form signup">
+          <header>Signup</header>
+          <form action="#">
+            <input type="text" placeholder="Full name" required />
+            <input
+              type="email"
+              placeholder="Email address"
+              required
+              id="emailSignUp"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              id="passwordSignUp"
+            />
+            <div class="checkbox">
+              <input type="checkbox" id="signupCheck" />
+              <label for="signupCheck">I accept all terms & conditions</label>
+            </div>
+            <input type="submit" value="Signup" id="signUpBtn" />
+          </form>
+        </div>
+        <div class="form login">
+          <header>Login</header>
+          <form action="#">
+            <input
+              type="email"
+              placeholder="Email address"
+              required
+              id="email"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              id="password"
+              required
+            />
+            <a href="#">Forgot password?</a>
+            <input type="submit" value="Login" id="loginBtn" />
+          </form>
+        </div>
+        <script>
+          const wrapper = document.querySelector('.wrapper'),
+            signupHeader = document.querySelector('.signup header'),
+            loginHeader = document.querySelector('.login header');
+
+          loginHeader.addEventListener('click', () => {
+            wrapper.classList.toggle('active');
+          });
+          signupHeader.addEventListener('click', () => {
+            wrapper.classList.toggle('active');
+          });
+        </script>
+      </section>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
