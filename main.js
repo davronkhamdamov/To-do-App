@@ -14,6 +14,7 @@ form.addEventListener('submit', (e) => {
     method: 'POST',
     body: JSON.stringify({
       value,
+      token: localStorage.getItem('tokenUser'),
     }),
   })
     .then((res) => res.json())
@@ -34,7 +35,12 @@ let local = localStorage.getItem('token')
 if (!local) {
   localStorage.setItem('token', 'gettodoall')
 }
-fetch(`http://127.0.0.1:3030/${local}`)
+fetch(`http://127.0.0.1:3030/${local}`, {
+  method: 'POST',
+  body: JSON.stringify({
+    token: localStorage.getItem('tokenUser'),
+  }),
+})
   .then((res) => res.json())
   .then((data) => {
     writeUI(data)
@@ -97,8 +103,9 @@ if (localstr === 'login') {
   todopage.remove()
 } else if (localstr === 'logout') {
   login.remove()
+} else {
+  localStorage.setItem('todo', 'login')
 }
-localStorage.setItem('todo', 'login')
 
 // users
 
@@ -121,10 +128,14 @@ loginHeader.addEventListener('click', () => {
 signupHeader.addEventListener('click', () => {
   wrapper.classList.remove('active')
 })
+const f = localStorage.getItem('isRegister')
 
-if (localStorage.getItem('isRegister') === 'true') {
+if (f === 'true') {
   wrapper.classList.add('active')
+} else if (f === 'false') {
+  wrapper.classList.remove('active')
 }
+
 //
 
 signUpBtn.addEventListener('click', () => {
@@ -146,17 +157,42 @@ signUpBtn.addEventListener('click', () => {
           alert('This user already added')
         }
       })
+  } else {
+    alert(
+      `${email.value.length < 4 ? 'Email ' : ''}${
+        password.value.length < 4 ? 'Password ' : ''
+      }` + '4 tadan kam bolmasin',
+    )
   }
 })
 
 loginBtn.addEventListener('click', () => {
-  if (email.length > 4 && password.length > 4) {
-    fetch('http://127.0.0.1:3030/login_usr', {
+  if (email.value.length > 4 && password.value.length > 4) {
+    fetch('http://127.0.0.1:3030/login', {
       method: 'POST',
       body: JSON.stringify({
         email: email.value,
         password: password.value,
       }),
     })
+      .then((res) => res.json())
+      .then((message) => {
+        if (message.message === 'success') {
+          alert('succes')
+          localStorage.setItem('todo', 'logout')
+          localStorage.setItem('isRegister', 'false')
+          location.reload()
+        } else if (message.message === 'password wrong') {
+          alert(message.message)
+        } else if (message.message === 'User not found') {
+          alert(message.message)
+        }
+      })
+  } else {
+    alert(
+      `${email.value.length < 4 ? 'Email ' : ''}${
+        password.value.length < 4 ? 'Password ' : ''
+      }` + '4 tadan kam bolmasin',
+    )
   }
 })

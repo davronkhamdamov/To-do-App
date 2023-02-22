@@ -9,24 +9,29 @@ const port = process.env.PORT || 3030
 const { readFiles, writeFiles } = require('./utils/utils')
 
 const server = http.createServer((req, res) => {
-  if (req.method === 'GET') {
+  if (req.method === 'POST') {
     if (req.url === '/gettodoall') {
-      let getData = readFiles('data.json')
-      res.writeHead(200, options)
-      res.end(JSON.stringify(getData))
+      req.on('data', (chunk) => {
+        const data = JSON.parse(chunk)
+        let getData = readFiles('data.json')
+        const filter = getData.filter((e) => e.token === data.token)
+        res.writeHead(200, options)
+        res.end(JSON.stringify(filter))
+      })
     }
     if (req.url === '/gettodoactive') {
-      let getData = readFiles('data.json')
-      res.writeHead(200, options)
-      res.end(JSON.stringify(getData.filter((e) => !e.isComplate)))
+      req.on('data', (chunk) => {
+        const data = JSON.parse(chunk)
+        let getData = readFiles('data.json')
+        res.writeHead(200, options)
+        res.end(JSON.stringify(getData.filter((e) => !e.isComplate)))
+      })
     }
     if (req.url === '/gettodocompl') {
       let getData = readFiles('data.json')
       res.writeHead(200, options)
       res.end(JSON.stringify(getData.filter((e) => e.isComplate)))
     }
-  }
-  if (req.method === 'POST') {
     if (req.url === '/create_usr') {
       req.on('data', (chunk) => {
         const data = JSON.parse(chunk)
@@ -55,6 +60,30 @@ const server = http.createServer((req, res) => {
         }
       })
     }
+    if (req.url === '/login') {
+      req.on('data', (chunk) => {
+        const data = JSON.parse(chunk)
+        console.log(data)
+        const getUsers = readFiles('users.json')
+        const find = getUsers.find((e) => e.email === data.email)
+        if (!find) {
+          res.writeHead(404, options)
+          return res.end(JSON.stringify({ message: 'User not found' }))
+        } else {
+          if (find.password === btoa(data.password)) {
+            res.writeHead(200, options)
+            res.end(JSON.stringify({ message: 'success' }))
+          } else {
+            res.writeHead(200, options)
+            res.end(
+              JSON.stringify({
+                message: 'password wrong',
+              }),
+            )
+          }
+        }
+      })
+    }
     if (req.url === '/createtodo') {
       req.on('data', (chunk) => {
         const data = JSON.parse(chunk)
@@ -70,6 +99,7 @@ const server = http.createServer((req, res) => {
             id: getData.length + 1,
             todo: data.value,
             isComplate: false,
+            token: data.token,
           })
           writeFiles('data.json', getData)
           res.writeHead(200, options)
@@ -77,8 +107,6 @@ const server = http.createServer((req, res) => {
         }
       })
     }
-  }
-  if (req.method === 'POST') {
     if (req.url === '/updatetodo') {
       req.on('data', (chunk) => {
         const data = JSON.parse(chunk)
