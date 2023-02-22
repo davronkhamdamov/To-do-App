@@ -17,11 +17,21 @@
     {
         "id": 6,
         "todo": "qwfev",
-        "isComplate": false
+        "isComplate": true
     },
     {
         "id": 5,
         "todo": "walk a dog",
-        "isComplate": false
+        "isComplate": true
+    },
+    {
+        "id": 6,
+        "todo": "e",
+        "isComplate": true
+    },
+    {
+        "id": 7,
+        "todo": "eqewr",
+        "isComplate": true
     }
 ]

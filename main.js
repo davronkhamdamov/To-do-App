@@ -3,6 +3,9 @@ const wrap = document.querySelector('.card-body')
 const active = document.getElementById('active')
 const all = document.getElementById('all')
 const complate = document.getElementById('complate')
+const todopage = document.getElementById('todoPage')
+const login = document.getElementById('login')
+const localstr = localStorage.getItem('todo')
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -38,23 +41,14 @@ fetch(`http://127.0.0.1:3030/${local}`)
     active.addEventListener('click', () => {
       localStorage.setItem('token', 'gettodoactive')
       window.location.reload()
-      // let filter = data.filter((e) => !e.isComplate && e)
-      // dataq = filter
-      // writeUI(dataq)
     })
     complate.addEventListener('click', () => {
       localStorage.setItem('token', 'gettodocompl')
       window.location.reload()
-
-      // let filter = data.filter((e) => e.isComplate && e)
-      // dataq = filter
-      // writeUI(dataq)
     })
     all.addEventListener('click', () => {
       localStorage.setItem('token', 'gettodoall')
       window.location.reload()
-      // dataq = data
-      // writeUI(dataq)
     })
   })
 
@@ -98,3 +92,12 @@ function fetchData(data, w) {
     body: JSON.stringify(data),
   })
 }
+
+if (localstr === 'login') {
+  todopage.remove()
+} else if (localstr === 'logout') {
+  login.remove()
+}
+localStorage.setItem('todo', 'login')
+
+// users
