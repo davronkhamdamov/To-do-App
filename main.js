@@ -111,6 +111,52 @@ email = document.getElementById('email')
 
 //
 
+const wrapper = document.querySelector('.wrapper'),
+  signupHeader = document.querySelector('.signup header'),
+  loginHeader = document.querySelector('.login header')
+
+loginHeader.addEventListener('click', () => {
+  wrapper.classList.add('active')
+})
+signupHeader.addEventListener('click', () => {
+  wrapper.classList.remove('active')
+})
+
+if (localStorage.getItem('isRegister') === 'true') {
+  wrapper.classList.add('active')
+}
+//
+
 signUpBtn.addEventListener('click', () => {
-  // emailSignUp.value
+  if (emailSignUp.value.length > 4 && passwordSignUp.value.length > 4) {
+    fetch('http://127.0.0.1:3030/create_usr', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: emailSignUp.value,
+        password: passwordSignUp.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === 'ok') {
+          alert('You are succes registered')
+          localStorage.setItem('tokenUser', data.token)
+          localStorage.setItem('isRegister', 'true')
+        } else if (data.message === 'error') {
+          alert('This user already added')
+        }
+      })
+  }
+})
+
+loginBtn.addEventListener('click', () => {
+  if (email.length > 4 && password.length > 4) {
+    fetch('http://127.0.0.1:3030/login_usr', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+    })
+  }
 })

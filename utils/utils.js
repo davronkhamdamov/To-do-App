@@ -1,15 +1,15 @@
 const fs = require('fs')
 const path = require('path')
 
-const readFiles = () => {
+const readFiles = (fileName) => {
   return JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../data', 'data.json'), 'utf-8'),
+    fs.readFileSync(path.join(__dirname, '../data', fileName), 'utf-8'),
   )
 }
 
-const writeFiles = (data) => {
+const writeFiles = (fileName, data) => {
   return fs.writeFileSync(
-    path.join(__dirname, '../data', 'data.json'),
+    path.join(__dirname, '../data', fileName),
     JSON.stringify(data, null, 4),
   )
 }
