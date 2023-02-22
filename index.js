@@ -21,16 +21,21 @@ const server = http.createServer((req, res) => {
     }
     if (req.url === '/gettodoactive') {
       req.on('data', (chunk) => {
-        const data = JSON.parse(chunk)
         let getData = readFiles('data.json')
+        const data = JSON.parse(chunk)
+        const filter = getData.filter((e) => e.token === data.token)
         res.writeHead(200, options)
-        res.end(JSON.stringify(getData.filter((e) => !e.isComplate)))
+        res.end(JSON.stringify(filter.filter((e) => !e.isComplate)))
       })
     }
     if (req.url === '/gettodocompl') {
-      let getData = readFiles('data.json')
-      res.writeHead(200, options)
-      res.end(JSON.stringify(getData.filter((e) => e.isComplate)))
+      req.on('data', (chunk) => {
+        let getData = readFiles('data.json')
+        const data = JSON.parse(chunk)
+        const filter = getData.filter((e) => e.token === data.token)
+        res.writeHead(200, options)
+        res.end(JSON.stringify(filter.filter((e) => e.isComplate)))
+      })
     }
     if (req.url === '/create_usr') {
       req.on('data', (chunk) => {

@@ -26,11 +26,11 @@ if (localstr === 'login') {
   signupHeader.addEventListener('click', () => {
     wrapper.classList.remove('active')
   })
-  const f = localStorage.getItem('isRegister')
+  const f = localStorage.getItem('tokenUser')
 
-  if (f === 'true') {
+  if (f) {
     wrapper.classList.add('active')
-  } else if (f === 'false') {
+  } else if (f) {
     wrapper.classList.remove('active')
   }
 
@@ -50,7 +50,6 @@ if (localstr === 'login') {
           if (data.message === 'ok') {
             alert('You are succes registered')
             localStorage.setItem('tokenUser', data.token)
-            localStorage.setItem('isRegister', 'true')
           } else if (data.message === 'error') {
             alert('This user already added')
           }
@@ -102,7 +101,12 @@ if (localstr === 'login') {
   const active = document.getElementById('active')
   const all = document.getElementById('all')
   const complate = document.getElementById('complate')
-  const logout = document.getElementById('logout')
+  const logout = document.getElementById('logOut')
+
+  logout.addEventListener('click', () => {
+    localStorage.setItem('todo', 'login')
+    location.reload()
+  })
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
